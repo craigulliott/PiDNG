@@ -129,12 +129,13 @@ class Picamera2Camera(BaseCameraModel):
         self.tags.set(Tag.ProfileEmbedPolicy, [profile_embed])
         
 class RaspberryPiHqCamera(BaseCameraModel):
-    def __init__(self, sensor_mode : int, cfaPattern=CFAPattern.BGGR, orientation=Orientation.Horizontal) -> None:
+    def __init__(self, sensor_mode : int, fmt : dict, cfaPattern=CFAPattern.BGGR, orientation=Orientation.Horizontal) -> None:
         super().__init__()
         self.model = RaspberryPiCameraModels.Raspberry_Pi_High_Quality_Camera
         self.mode = sensor_mode
         self.orientation = orientation
         self.cfaPattern = cfaPattern
+        self.fmt = fmt
         self.__settings__()
 
     def __settings__(self) -> None:
@@ -159,6 +160,9 @@ class RaspberryPiHqCamera(BaseCameraModel):
             bpp = 12
         else: 
             bpp = 10
+
+        self.fmt['size']=(width,height)
+        self.fmt['bpp']=bpp
 
         profile_name = "Repro 2_5D no LUT - D65 is really 5960K"
         profile_embed = 3
